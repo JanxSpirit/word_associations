@@ -1,0 +1,31 @@
+import AssemblyKeys._
+
+name := "inkblot"
+
+version := "1.0"
+
+scalaVersion := "2.9.1"
+
+mainClass := Some("JettyLauncher")
+
+seq(webSettings :_*)
+
+port in container.Configuration := 8080
+
+seq(assemblySettings: _*)
+
+libraryDependencies ++= Seq(
+  "com.mongodb.casbah" %% "casbah" % "2.1.5-1",
+  "org.scalatra" %% "scalatra" % "2.0.0",
+  "org.scalatra" %% "scalatra-specs" % "2.0.0" % "test",
+  "org.mortbay.jetty" % "servlet-api" % "3.0.20100224" % "provided",
+  "org.eclipse.jetty" % "jetty-server" % "8.0.0.M3" % "container, compile",
+  "org.eclipse.jetty" % "jetty-util" % "8.0.0.M3" % "container, compile",
+  "org.eclipse.jetty" % "jetty-webapp" % "8.0.0.M3" % "container, compile"
+  )
+
+resolvers ++= Seq(
+  "Sonatype OSS" at "http://oss.sonatype.org/content/repositories/releases/",
+  "Sonatype OSS Snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/",
+  "Web plugin repo" at "http://siasia.github.com/maven2"
+)
