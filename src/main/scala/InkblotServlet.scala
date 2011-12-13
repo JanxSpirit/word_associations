@@ -103,7 +103,10 @@ class InkblotServlet extends ScalatraServlet {
 
   post("/associations/g/:game/guesses") {
     val dbo = com.mongodb.util.JSON.parse(request.body).asInstanceOf[DBObject]
-    val user = request.cookies.get("user")
+    val user = request.cookies.get("user") match {
+      case Some(user) => user
+      case None => halt(400)
+    }
     dbo.put("createdAt", System.currentTimeMillis)
     dbo.put("user", user)
     dbo.put("game", params("game"))
