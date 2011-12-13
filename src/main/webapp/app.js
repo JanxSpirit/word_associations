@@ -60,11 +60,11 @@ var Game = {
   
   guess: function() {
     log('Game.guess();');
-    var guess = {guess: $('#word_input').text()};
-    $('#word_input').val();
+    var guess = {guess: $('#word_input').val()};
+    $('#word_input').val('');
     var request = $.post(Game.host + "/associations/g/" + Game.state.game + "/guesses", guess, function(data) {
       log("Game.guess() callback:");
-      alert(data);
+      console.log(data);
     });
   }
 
