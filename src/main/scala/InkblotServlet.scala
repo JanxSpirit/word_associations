@@ -1,14 +1,17 @@
 import com.mongodb.casbah.commons.MongoDBObjectBuilder
 import org.scalatra._
 import com.mongodb.casbah.Imports._
-import java.util.{TimerTask, Timer, Date}
+import java.util.{TimerTask, Timer}
 
 class InkblotServlet extends ScalatraServlet {
 
   //setup Casbah connection
-  val wordList = List("foo","apple", "disingenuous", "unlimited", "platinum")
+  val wordList = List("foo","apple", "boring", "truly", "platinum", "strange", "missing", "wry", "hot", "blast", "stopper", "flight", "crew", "quench",
+    "piper", "mild", "pile")
   val mongo_assoc = MongoConnection("localhost", 27017)("inkblot")("associations")
   val mongo_games = MongoConnection("localhost", 27017)("inkblot")("games")
+  mongo_assoc.dropCollection
+  mongo_games.dropCollection
   var currentWord: Int = 0
   var currentGameStart: Long = System.currentTimeMillis
 
@@ -16,7 +19,7 @@ class InkblotServlet extends ScalatraServlet {
   gameTimer.schedule(new GameTask, 0, (30 * 1000))
 
   before() {
-    response.setHeader("Access-Control-Allow-Origin" -> "*")
+    response.setHeader("Access-Control-Allow-Origin", "*")
   }
 
   get("/associations/current") {
@@ -38,19 +41,19 @@ class InkblotServlet extends ScalatraServlet {
     val r = MongoDBObject.newBuilder
 
     //game section
-    val game = mongo_games.findOneByID(params("game")).get
+    val game = mongo_games.findOne(MongoDBObject("game" -> params("game"))).get
     r += ("game" -> params("game"))
     r += ("mode" -> game.getAs[String]("mode"))
     r += ("now" -> System.currentTimeMillis())
-    r += ("gameStart" -> game.getAs[Date]("gameStart").getOrElse(System.currentTimeMillis()))
-    r += ("gameEnd" -> game.getAs[Date]("gameEnd").getOrElse(System.currentTimeMillis()))
+    r += ("gameStart" -> game.getAs[Long]("gameStart").getOrElse(System.currentTimeMillis()))
+    r += ("gameEnd" -> game.getAs[Long]("gameEnd").getOrElse(System.currentTimeMillis()))
     if (isGameDone) r += ("nextGame" -> ("associations/g/"+(wordList(currentWord+1))))
 
     //guesses
     val all = mongo_assoc.find(MongoDBObject("game" -> params("game"))).toList
     val gts = all.flatMap(a => {
       if (a.getAs[String]("guess") != None) {
-        Some(GuessTime(a.getAs[String]("guess").get, a.getAs[String]("user").get, a.getAs[Date]("createdAt").get))
+        Some(GuessTime(a.getAs[String]("guess").get, a.getAs[String]("user").get, a.getAs[Long]("createdAt").get))
       } else None
     })
     val builders: List[MongoDBObjectBuilder] = gts.sortWith((a, b) => a.guess < b.guess).groupBy(gt => gt.guess).map(gp => {
@@ -58,13 +61,13 @@ class InkblotServlet extends ScalatraServlet {
       val builder = MongoDBObject.newBuilder
       builder += ("display" -> (if (bongoed) gp._1 else null))
       builder += ("user" -> (if (bongoed) {
-        gp._2.sortWith((a, b) => a.createdAt.getTime < b.createdAt.getTime).head.user
+        gp._2.sortWith((a, b) => a.createdAt < b.createdAt).head.user
       } else gp._2.head.user))
       if (bongoed) builder += ("matcher" -> gp._2(1).user)
       builder += ("updated" -> (if (bongoed) {
-        gp._2(1).createdAt.getTime
+        gp._2(1).createdAt
       } else {
-        gp._2(0).createdAt.getTime
+        gp._2(0).createdAt
       }))
     }).toList
     (0 until builders.size).foreach(i => {
@@ -88,7 +91,7 @@ class InkblotServlet extends ScalatraServlet {
       MongoDBObject(
         "user" -> row._1,
         "points" -> row._2,
-        "arrived" -> gts.filter(_.user == row._1).sortWith((a, b) => a.createdAt.getTime < b.createdAt.getTime).head.createdAt.getTime
+        "arrived" -> gts.filter(_.user == row._1).sortWith((a, b) => a.createdAt < b.createdAt).head.createdAt
       )
     })
 
@@ -126,7 +129,7 @@ class InkblotServlet extends ScalatraServlet {
       val game = mongo_games.findOne(q)
       game match {
         case Some(game) => {
-          if ((game.getAs[Long]("gameEnd").get) < System.currentTimeMillis) {
+          if ((game.getAs[Long]("gameEnd").get) > System.currentTimeMillis) {
             "associations/g/"+wordList(currentWord)
           } else {
             newGame
@@ -161,7 +164,7 @@ class GameTask extends TimerTask {
   }
 }
 
-case class GuessTime(guess: String, user: String, createdAt: Date)
+case class GuessTime(guess: String, user: String, createdAt: Long)
 
 
 //TODO - make sure users can only make one given guess on a word
