@@ -55,7 +55,8 @@ var Game = {
     
     // Timer
     var duration = Math.floor(parseInt(Game.state.gameEnd, 10)/1000 - parseInt(Game.state.now, 10)/1000);
-    Timer.start(duration);
+    // Timer.start(duration);
+    $('#timer').text(duration);
   },
   
   guess: function() {
