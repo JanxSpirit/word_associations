@@ -94,6 +94,9 @@ ol#players {
 }
 
 ol#players li {
+  float: none;
+  clear: both;
+  overflow: hidden;
   padding: 6px 0;
   border-top: 1px solid #DDD;
 }

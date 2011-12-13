@@ -142,7 +142,7 @@ $(function() {
   
   // Game.fetchState();
   
-  setInterval('Game.fetchState()', 5000);
+  setInterval('Game.fetchState()', 500);
 
   $('form#play').submit(function() {
     try {
