@@ -1,0 +1,117 @@
+body {
+  padding: 40px;
+  background-color: #DDD;
+  font-size: 18px;
+  line-height: 18px;
+}
+
+div#content {
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  width: 480px;
+  background-color: white;
+  padding: 50px 20px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+
+  -webkit-box-shadow: 2px 2px 5px 5px #CCC;
+  -moz-box-shadow: 2px 2px 5px 5px #CCC;
+  box-shadow: 2px 2px 5px 5px #CCC;
+}
+
+div#timer {
+  color: white;
+  font-size: 80px;
+  line-height: 80px;
+  font-weight: bold;
+  text-align: center;
+  background-color: #268BD2;
+  width: 200px;
+  height: 140px;
+  padding-top: 60px;
+  -webkit-border-radius: 100px;
+  -moz-border-radius: 100px;
+  border-radius: 100px;
+  margin: 0 0 40px 140px;
+}
+
+p#query {
+  text-align: center;
+  font-weight: bold;
+  display: block;
+  font-size: 32px;
+  line-height: 32px;
+  color: #999;
+  margin: 0 0 40px 0;
+}
+
+p#query span.word {
+  color: #333;
+}
+
+form#play{
+  margin: 0 0 5px 0;
+  float: none;
+  clear: both;
+  overflow: hidden;
+}
+
+form#play #word_input {
+  width: 460px;
+  height: auto;
+  padding: 5px;
+  font-size: 18px;
+  line-height: 18px;
+}
+
+
+h2 {
+  margin-top: 50px;
+  color: #999;
+}
+
+ul#guesses {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+ul#guesses li {
+  padding: 6px 0;
+  border-bottom: 1px solid #DDD;
+}
+
+h2 {
+  text-align: center;
+}
+
+ol#players {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+ol#players li {
+  padding: 6px 0;
+  border-top: 1px solid #DDD;
+}
+
+ol#players li:last-child {
+  border-bottom: none;
+}
+
+ol#players span.name {
+  display: block;
+  float: left;
+  clear: none;
+}
+
+ol#players span.score {
+  display: block;
+  float: right;
+  clear: none;
+  color: #268BD2;
+}
+
