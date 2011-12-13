@@ -27,8 +27,11 @@ var Game = {
   state: null,
   
   fetchState: function() {
+    log('Game.fetchState()');
     $.getJSON(Game.host + '/associations/current', function(data) {
+      log('Game.fetchState() 2', data);
       $.getJSON(Game.host + data.location, function(data) {
+        log('Game.fetchState() 3', data);
         Game.state = data;
         Game.update();
       });
@@ -93,7 +96,7 @@ var Timer = {
 $(function() {
   
   if ($.cookie('user') == null) {
-    var user = prompt("Hello there, good-looking stranger! What's your name?", "")
+    var user = prompt("Hello there, goodlooking stranger! What's your name?", "");
     
     // Account for empty username
     if (user == null || user == '') {
@@ -103,23 +106,25 @@ $(function() {
     $.cookie('user', user);
   }
   
-  Game.state = {
-    game: "cherry",
-    mode: "rhyme",
-    now: 100,
-    endTime: 130,
-    scoreboard: [
-      {user: "drewp", points: 3, arrived: 129853985}
-     ],
-     guesses: [
-      {"row":0, "display":"***", "user":"drewp", "updated" : 1290473533},
-      {"row":1, "display":"berry", "user":"drewp", "matcher":"gregg", "updated" : 1209283533}
-     ],
-     guess: "http://server/associations/g/:game/guesses",
-     nextGame: "http://server/associations/g/chocolate" // appears when this game is done
-  };
+  // Game.state = {
+  //   game: "cherry",
+  //   mode: "rhyme",
+  //   now: 100,
+  //   endTime: 130,
+  //   scoreboard: [
+  //     {user: "drewp", points: 3, arrived: 129853985}
+  //    ],
+  //    guesses: [
+  //     {"row":0, "display":"***", "user":"drewp", "updated" : 1290473533},
+  //     {"row":1, "display":"berry", "user":"drewp", "matcher":"gregg", "updated" : 1209283533}
+  //    ],
+  //    guess: "http://server/associations/g/:game/guesses",
+  //    nextGame: "http://server/associations/g/chocolate" // appears when this game is done
+  // };
   
-  Game.fetchState();
+  // Game.fetchState();
+  
+  setInterval('Game.fetchState()', 1000);
   
   Game.update();
 
@@ -128,5 +133,4 @@ $(function() {
     return false;
   });
   
-
 });
