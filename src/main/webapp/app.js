@@ -62,10 +62,25 @@ var Game = {
     log('Game.guess();');
     var guess = {guess: $('#word_input').val()};
     $('#word_input').val('');
-    var request = $.post(Game.host + "/associations/g/" + Game.state.game + "/guesses", guess, function(data) {
-      log("Game.guess() callback:");
-      console.log(data);
+
+    // $.post(Game.host + "/associations/g/" + Game.state.game + "/guesses", guess, function(data) {
+    //   log("Game.guess() callback:");
+    //   console.log(data);
+    // });
+        
+    $.ajax({
+      type: "POST",
+      url: Game.host + "/associations/g/" + Game.state.game + "/guesses",
+      dataType: 'json',
+      headers: {'Content-Type': 'application/json'},
+      async: false,
+      data: JSON.stringify(guess),
+      success: function () {
+        log("Game.guess() callback:");
+        console.log(data);
+      }
     });
+    
   }
 
   
