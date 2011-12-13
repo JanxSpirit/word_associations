@@ -125,8 +125,6 @@ $(function() {
   // Game.fetchState();
   
   setInterval('Game.fetchState()', 5000);
-  
-  Game.update();
 
   $('form#play').submit(function() {
     Game.guess();
