@@ -63,11 +63,11 @@ var Game = {
     var guess = {guess: $('#word_input').val()};
     $('#word_input').val('');
 
-    // $.post(Game.host + "/associations/g/" + Game.state.game + "/guesses", guess, function(data) {
-    //   log("Game.guess() callback:");
-    //   console.log(data);
-    // });
-        
+    $.post(Game.host + "/associations/g/" + Game.state.game + "/guesses", guess, function(data) {
+      log("Game.guess() callback:");
+      console.log(data);
+    });
+
     $.ajax({
       type: "POST",
       url: Game.host + "/associations/g/" + Game.state.game + "/guesses",
@@ -142,7 +142,12 @@ $(function() {
   setInterval('Game.fetchState()', 5000);
 
   $('form#play').submit(function() {
-    Game.guess();
+    try {
+      Game.guess();      
+    } catch(e) {
+      log(e);
+    }
+    
     return false;
   });
   
