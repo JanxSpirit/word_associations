@@ -75,11 +75,14 @@ var Game = {
       headers: {'Content-Type': 'application/json'},
       async: false,
       data: JSON.stringify(guess),
-      success: function () {
+      success: function (data) {
         log("Game.guess() callback:");
         console.log(data);
+        Game.fetchState();
       }
     });
+    
+    
     
   }
 
