@@ -54,7 +54,7 @@ var Game = {
     $('p#query').html(queryTemplate(query));
     
     // Timer
-    var duration = parseInt(Game.state.endTime, 10) - parseInt(Game.state.now, 10);
+    var duration = parseInt(Game.state.gameEnd, 10)/1000 - parseInt(Game.state.now, 10)/1000;
     Timer.start(duration);
   },
   
@@ -124,7 +124,7 @@ $(function() {
   
   // Game.fetchState();
   
-  setInterval('Game.fetchState()', 1000);
+  setInterval('Game.fetchState()', 5000);
   
   Game.update();
 
