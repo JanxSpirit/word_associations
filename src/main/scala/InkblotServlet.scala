@@ -47,7 +47,7 @@ class InkblotServlet extends ScalatraServlet {
     r += ("now" -> System.currentTimeMillis())
     r += ("gameStart" -> game.getAs[Long]("gameStart").getOrElse(System.currentTimeMillis()))
     r += ("gameEnd" -> game.getAs[Long]("gameEnd").getOrElse(System.currentTimeMillis()))
-    if (isGameDone) r += ("nextGame" -> ("associations/g/"+(wordList(currentWord+1))))
+    if (isGameDone) r += ("nextGame" -> ("/associations/g/"+(wordList(currentWord+1))))
 
     //guesses
     val all = mongo_assoc.find(MongoDBObject("game" -> params("game"))).toList
@@ -133,7 +133,7 @@ class InkblotServlet extends ScalatraServlet {
       game match {
         case Some(game) => {
           if ((game.getAs[Long]("gameEnd").get) > System.currentTimeMillis) {
-            "associations/g/"+wordList(currentWord)
+            "/associations/g/"+wordList(currentWord)
           } else {
             newGame
           }
@@ -155,7 +155,7 @@ class InkblotServlet extends ScalatraServlet {
       )
       mongo_games += newGame
       //return its location
-      "associations/g/"+wordList(currentWord)
+      "/associations/g/"+wordList(currentWord)
     }
   }
 
